@@ -122,6 +122,10 @@ AUTH_USER_MODEL = 'Users.User'
 
 
 STATIC_URL = "static/"
+STATICFILES_DIR = [
+    BASE_DIR / "static",
+]
+
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 
