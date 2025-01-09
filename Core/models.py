@@ -1,6 +1,6 @@
 from django.db import models 
 from django.utils.translation import gettext_lazy as _
-import uuid
+import uuid , os
 
 
 
@@ -17,6 +17,14 @@ class BaseModel(models.Model):
         abstract = True
 
 
+
+
+
+
+def upload_to(instance,filename):
+    model_name = instance.model_name.lower()
+    return os.path.join(model_name , filename)
+
     
 
 class Image(BaseModel):
@@ -24,11 +32,18 @@ class Image(BaseModel):
     name = models.CharField(_('Name'), max_length=200)
     alt_text = models.CharField(_('Alternative Text'), max_length=50 , blank=True)
     model_name = models.CharField(max_length=50)
-    Image = models.ImageField(_('Image'), upload_to='images/%(model_name)s/')
+    Image = models.ImageField(_('Image'), upload_to= upload_to)
     is_default = models.BooleanField(default=False)
-
+    
 
     class Meta:
 
         verbose_name = _('Image')
         verbose_name_plural = _('Images')
+
+
+
+
+
+
+
