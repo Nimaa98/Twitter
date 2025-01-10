@@ -6,8 +6,11 @@
     <u1>
         {% for user in user_list%}
             <li>
-                {{user.username}}
+               {{user.profile_image.Image}} <a href="{{user.get_absolute_url}}">{{user.username}} </a>
             </li>
+            
+                
+      
         {%endfor%}
 
     </u1>

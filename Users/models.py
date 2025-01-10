@@ -1,11 +1,12 @@
-from django.db import models
+from django.db import models 
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from Core.models import BaseModel 
+from django.urls import reverse
 
 # Create your models here.
 
-class User(AbstractUser , BaseModel):
+class User(BaseModel , AbstractUser):
      
     phone_number = models.CharField(_('Phone Number'), max_length=20, blank=True )
     birthday = models.DateField(_('Birthday') , null=True , blank=True)
@@ -26,6 +27,14 @@ class User(AbstractUser , BaseModel):
 
     def count_following(self):
         return self.Following.count()
+    
+
+
+
+    def get_absolute_url(self):
+        
+        return reverse("Users:detail-user", args=[self.pk])
+    
     
 
 
