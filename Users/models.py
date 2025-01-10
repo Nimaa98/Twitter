@@ -29,8 +29,6 @@ class User(BaseModel , AbstractUser):
         return self.Following.count()
     
 
-
-
     def get_absolute_url(self):
         
         return reverse("Users:detail-user", args=[self.pk])
@@ -47,6 +45,8 @@ class Follow(BaseModel):
                                         related_name='Follower')
      
     class Meta:
-                
+        unique_together = ('following_user' , 'follower_user')  
+
         verbose_name = _('Follow')
         verbose_name_plural = _('Follows')
+        

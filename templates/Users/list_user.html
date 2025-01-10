@@ -1,18 +1,27 @@
 {% extends "base.html" %}
 
-
 {% block content %}
-    <h1> لیست کاربران </h1>
-    <u1>
-        {% for user in user_list%}
-            <li>
-               {{user.profile_image.Image}} <a href="{{user.get_absolute_url}}">{{user.username}} </a>
+    <h1>لیست کاربران</h1>
+    <ul style="list-style: none; padding: 0;">
+        {% for user in user_list %}
+            <li class="mb-4 p-3" style="border-bottom: 1px solid #ddd;">
+                <!-- عکس و نام کاربر -->
+                <div style="display: flex; align-items: center;">
+                    <img src="{{ user.profile_image.Image.url }}" style="width: 50px; height: auto; margin-right: 15px;">
+                    <div>
+                        <a href="{{ user.get_absolute_url }}" class="fw-bold d-block">{{ user.username }}</a>
+                    </div>
+                </div>
+
+                <!-- تعداد فالوورها و فالووینگ -->
+                <div style="margin-top: 10px; display: flex; gap: 15px; font-size: 14px; color: #555;">
+                    <span>Following: {{ user.count_following }}</span>
+                    <span>Followers: {{ user.count_followers }}</span>
+                </div>
             </li>
-            
-                
-      
-        {%endfor%}
+        {% endfor %}
+    </ul>
+{% endblock %}
 
-    </u1>
 
-{% endblock  %} 
+

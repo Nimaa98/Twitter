@@ -4,16 +4,20 @@
 {% block content %}
     <h1> اطلاعات کاربری</h1>
     <u1>
-        <li>
-            {{user_detail.username}}
-        </li>
-        <li>
-            {{user_detail.phone_number}}
-        </li>
-        <li>
+        <div>
+             نام:  {{user_detail.username}} 
+        </div>
+        <div>
+            شماره تلفن: {{user_detail.phone_number}}
+        </div>
+        <div>
 
-            {{user_detail.bio}}
-        </li>
+            بیوگرافی: {{user_detail.bio}}
+        </div>
+        <div>
+
+            تاریخ تولد: {{user_detail.birthday}}
+        </div>
 
 
     </u1>

@@ -122,6 +122,9 @@ USE_TZ = True
 
 AUTH_USER_MODEL = 'Users.User'
 
+LOGIN_URL = 'login/'
+#LOGIN_REDIRECT_URL = 'Users:login'
+
 
 STATIC_URL = "static/"
 STATICFILES_DIR = [
