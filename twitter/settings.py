@@ -122,7 +122,7 @@ USE_TZ = True
 
 AUTH_USER_MODEL = 'Users.User'
 
-LOGIN_URL = 'login/'
+LOGIN_URL = 'Users:login'
 #LOGIN_REDIRECT_URL = 'Users:login'
 
 
