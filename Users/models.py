@@ -28,6 +28,16 @@ class User(BaseModel , AbstractUser):
     def count_following(self):
         return self.Following.count()
     
+    def follow(self,from_user,to_user):
+        Follow.objects.create(follower_user = from_user , following_user=to_user)
+
+    def unfollow(self,from_user,to_user):
+        Follow.objects.filter(follower_user = from_user , following_user=to_user).delete()
+
+
+    def is_following(self,this_user,user):
+        return Follow.objects.filter(following_user=user, follower_user=this_user).exists()
+
 
     def get_absolute_url(self):
         
@@ -45,8 +55,7 @@ class Follow(BaseModel):
                                         related_name='Follower')
      
     class Meta:
-        unique_together = ('following_user' , 'follower_user')  
-
+        unique_together = ('following_user', 'follower_user')
         verbose_name = _('Follow')
         verbose_name_plural = _('Follows')
         

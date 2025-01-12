@@ -15,12 +15,28 @@ from django.contrib import messages
 class UserListView(View):
 
     def get(self, request):
-        
 
         user_list = User.objects.all()
-        print(request.user)
         template = 'Users/list_user.html'
         context = {"user_list" : user_list}
+
+        return render (
+            request= request,
+            template_name = template,
+            context= context,
+            )
+    
+class UserProfileView(View):
+    
+    def get(self, request):
+        user_list = User.objects.all()
+        this_user = request.user
+        for user in user_list:
+            user.is_followed = this_user.is_following(this_user,user)
+
+        
+        template = 'Users/user_profile.html'
+        context = {"this_user":request.user , "user_list": user_list}
 
         return render (
             request= request,
@@ -31,7 +47,6 @@ class UserListView(View):
 
 class UserDetailView(LoginRequiredMixin,View):
     
-
     def get(self, request, pk):
 
         user_detail = get_object_or_404(User , pk=pk)
@@ -51,11 +66,13 @@ class UserDetailView(LoginRequiredMixin,View):
 
 class LoginView(View):
 
+    form = LoginForm
+    user_list = User.objects.all()
+
     def get(self,request):
-        form = LoginForm
 
         template = 'login.html'
-        context = {"form": form}
+        context = {"form": self.form}
 
         return render (
             request= request,
@@ -65,10 +82,7 @@ class LoginView(View):
     
     def post(self,request):
         
-        form = LoginForm(request.POST)
-
-        template = 'login.html'
-        context = {"form": form}
+        form = self.form(request.POST)
 
         if form.is_valid():
             cd = form.cleaned_data
@@ -80,7 +94,22 @@ class LoginView(View):
 
         if user:
             login(request,user)
-            return redirect ('Users:user-list')
+            return redirect ('Users:user-profile')
 
-        messages.error(request,'invalid input')
+        messages.error(request,'نام کاربری یا رمز عبور اشتباه است!')
         return redirect('Users:login')
+
+
+class FollowView(LoginRequiredMixin,View):
+    def post(self,request, pk):
+
+        print(request.POST["action"])
+
+        user = get_object_or_404(User,pk=pk)
+
+        if request.POST["action"] == "follow":
+            user.follow(request.user,user)
+        else:
+            user.unfollow(request.user,user)
+        
+        return redirect('Users:user-profile')
