@@ -67,9 +67,9 @@ class Tag(BaseModel):
     text = models.CharField(_('Text'), max_length= 100)
     slug = models.SlugField(unique=True,db_index=True)
 
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.text)
-        super().save(*args,**kwargs)
+    #def save(self, *args, **kwargs):
+        #self.slug = slugify(self.text)
+        #super().save(*args,**kwargs)
         
 
     def __str__(self):
