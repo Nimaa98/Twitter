@@ -124,6 +124,7 @@ AUTH_USER_MODEL = 'Users.User'
 
 LOGIN_URL = 'Users:login'
 #LOGIN_REDIRECT_URL = 'Users:login'
+#LOGOUT_REDIRECT_URL = '/Users:logout'
 
 
 STATIC_URL = "static/"
