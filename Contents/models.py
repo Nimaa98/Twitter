@@ -18,11 +18,13 @@ class Post(BaseModel):
     
     tags = models.ManyToManyField('Tag',related_name='tag_post',
                              verbose_name=_('Tag'),
+                             through='PostTag',
                              )
     
     images = models.ManyToManyField(Image,
                                            related_name='image_post',
                                            verbose_name=_('Image'),
+                                           through='PostImage',
                                            )
     
                              
@@ -53,6 +55,13 @@ class Post(BaseModel):
         return Like.objects.filter(user=by_user, post=post).exists()
     
 
+
+class PostImage(BaseModel):
+    post = models.ForeignKey(Post,on_delete=models.CASCADE)
+    image = models.ForeignKey(Image,on_delete=models.CASCADE)
+    order = models.PositiveIntegerField(default=0)
+    
+
     
 class Tag(BaseModel):
     text = models.CharField(_('Text'), max_length= 100)
@@ -70,6 +79,11 @@ class Tag(BaseModel):
         verbose_name = _('Tag')
         verbose_name_plural = _('Tags')
 
+
+class PostTag(BaseModel):
+    post = models.ForeignKey(Post,on_delete=models.CASCADE)
+    tag = models.ForeignKey(Tag,on_delete=models.CASCADE)
+    order = models.PositiveIntegerField(default=0)
 
 
 
