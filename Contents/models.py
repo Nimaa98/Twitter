@@ -54,6 +54,10 @@ class Post(BaseModel):
     def is_liked(self,by_user,post):
         return Like.objects.filter(user=by_user, post=post).exists()
     
+    def get_absolute_url(self):
+        
+        return reverse("Contents:detail-post", args=[self.pk])
+    
 
 
 class PostImage(BaseModel):
@@ -78,6 +82,11 @@ class Tag(BaseModel):
     class Meta:
         verbose_name = _('Tag')
         verbose_name_plural = _('Tags')
+
+
+    def get_absolute_url(self):
+        
+        return reverse("Contents:tag", args=[self.pk])
 
 
 class PostTag(BaseModel):
