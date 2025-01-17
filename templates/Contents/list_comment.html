@@ -3,62 +3,14 @@
 {% block content %}
 <div class="container mt-3">
     <div class="row">
-
-
-      <div class="card">
-        <div class="card-header d-flex align-items-center">
-            <div style="display: flex; align-items: center;">
-                <img src="{{ post.user.profile_image.Image.url }}" style="width: 50px; height: auto; margin-right: 15px;">
-                <div>
-                    <a href="{{ post.user.get_absolute_url }}" class="fw-bold d-block">{{ post.user.username }}</a>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="card-body">
-          <h4 class="card-subtitle mb-2 text-muted">{{ post.title }}</h4>
-          <p class="card-text">{{ post.text }}</p>
-          {% if post.images.all %}
-          <div class="post-images">
-            {% for image in post.images.all %}
-            <img src="{{ image.Image.url }}" alt="{{ image.name }}" class="img-thumbnail" style="max-width: 200px; margin-bottom: 10px;">
-            {% endfor %}
-          </div>
-          {% endif %}
-
-
-          {% if post.tags.all %}
-          <div class="post-tags mt-3">
-            {% for tag in post.tags.all %}
-            <a href="{{ post.get_absolute_url }}" class="fw-bold d-block">#{{ tag.text }}</a><br>
-            <br>
-            {% endfor %}
-          </div>
-          {% endif %}
-        </div>
-
-
-        <div class="post-info mt-3"style="display: flex; align-items: center;">
-            <span class="badge bg-success me-3" >
-                <img src="{{ like.Image.url }}"  style="width: 20px; height: auto; margin-right: 5px;">
-                {{ post.count_likes }}Likes 
-            </span>
-            <span class="badge bg-info">
-                <img src="{{ comment.Image.url }}"  style="width: 20px; height: auto; margin-right: 40px;">
-                 {{ post.count_comments }}Comments
-            </span>
-        </div>
-
-      </div>
-
+      {% include "Components/card.html" %}
 
 
       <h4>نظرات</h4>
 
       <div id="comments">
           {% for comment in comments %}
-              {% include "comment.html" with comment=comment depth=0 %}
+              {% include "Contents/comment.html" with comment=comment depth=0 %}
             <h4>_________________</h4>
           {% endfor %}
       </div>
