@@ -6,6 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from Core.models import Image
+from django.http import JsonResponse
+
 
 # Create your views here.
 
@@ -33,11 +35,11 @@ class CommentListView(View):
         post = get_object_or_404(Post , pk=pk)
 
         comment_list = post.post_comment.filter(parent = None)
-        
-
+        like_symble = Image.objects.filter(name = 'like').first()
+        comment_symble = Image.objects.filter(name = 'comment').first()
 
         template = 'Contents/list_comment.html'
-        context = {"post" : post , "comments": comment_list}
+        context = {"post" : post , "comments": comment_list,"like" : like_symble , "comment" : comment_symble}
             
         return render (
                 request= request,
@@ -50,3 +52,19 @@ class CommentListView(View):
 class TagView(View):
     def get(self):
         pass
+
+
+class LikeView(LoginRequiredMixin,View):
+
+    def post(self, request, pk):
+        if request.method == "POST":
+            post = get_object_or_404(Post, pk=pk)
+            
+            if post.is_liked(request.user, post):
+                post.dislike(request.user,post)
+            else:
+                post.like(request.user,post)
+
+            post.save()
+            return JsonResponse({'likes': post.count_likes()}) 
+        return JsonResponse({'error': 'Invalid request method'}, status=400)

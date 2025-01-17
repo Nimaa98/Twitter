@@ -1,8 +1,9 @@
 
+{% load static %}
 <div class="card">
     <div class="card-header d-flex align-items-center">
         <div style="display: flex; align-items: center;">
-            <img src="{{ post.user.profile_image.Image.url }}" style="width: 50px; height: auto; margin-right: 15px;">
+            <img src="{{ post.user.profile_image.Image.url }}" style="width: 50px; height: auto; margin-right: 0px;">
             <div>
                 <a href="{{ post.user.get_absolute_url }}" class="fw-bold d-block">{{ post.user.username }}</a>
             </div>
@@ -33,15 +34,66 @@
     </div>
 
 
-    <div class="post-info mt-3"style="display: flex; align-items: center;">
-        <span class="badge bg-success me-3" >
-            <img src="{{ like.Image.url }}"  style="width: 20px; height: auto; margin-right: 5px;">
-            {{ post.count_likes }}Likes 
-        </span>
-        <span class="badge bg-info">
-            <img src="{{ comment.Image.url }}"  style="width: 20px; height: auto; margin-right: 40px;">
-             {{ post.count_comments }}Comments
-        </span>
-    </div>
+    <div class="post-info mt-3" style="display: flex; align-items: center; background-color: #538C9D;">
+ 
+      <button id="like-button-{{ post.id }}" class="badge bg-success me-3" style="border: none; cursor: pointer; display: flex; align-items: center; background-color: #538C9D;"
+              onclick="likePost('{{ post.id }}')">
+          <img src="{{ like.Image.url }}" style="width: 20px; height: auto; margin-right: 5px;">
+          <span id="like-count-{{ post.id }}">{{ post.count_likes }}</span> Likes
+      </button>
+
+      <button class="badge bg-info" style="border: none; cursor: pointer; display: flex; align-items: center; background-color: #538C9D;"
+              onclick="window.location.href='{% url 'Contents:comment-list' post.id %}'">
+          <img src="{{ comment.Image.url }}" style="width: 20px; height: auto; margin-right: 40px;">
+          {{ post.count_comments }} Comments
+      </button>
+  </div>
 
   </div>
+
+
+  <script>
+    function likePost(postId) {
+        const csrftoken = getCookie('csrftoken');
+        fetch(`/like/${postId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json(); 
+            } else {
+                throw new Error('Failed to like the post');
+            }
+        })
+        .then(data => {
+
+          const likeCountElement = document.getElementById(`like-count-${postId}`);
+            likeCountElement.textContent = data.likes; 
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    }
+
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
