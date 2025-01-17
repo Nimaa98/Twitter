@@ -3,7 +3,8 @@
 {% block content %}
 <div class="container mt-3">
     <div class="row">
-      {% for post in post_list %}
+
+
       <div class="card">
         <div class="card-header d-flex align-items-center">
             <div style="display: flex; align-items: center;">
@@ -13,6 +14,8 @@
                 </div>
             </div>
         </div>
+
+
         <div class="card-body">
           <h4 class="card-subtitle mb-2 text-muted">{{ post.title }}</h4>
           <p class="card-text">{{ post.text }}</p>
@@ -23,6 +26,8 @@
             {% endfor %}
           </div>
           {% endif %}
+
+
           {% if post.tags.all %}
           <div class="post-tags mt-3">
             {% for tag in post.tags.all %}
@@ -32,34 +37,35 @@
           </div>
           {% endif %}
         </div>
+
+
         <div class="post-info mt-3"style="display: flex; align-items: center;">
             <span class="badge bg-success me-3" >
                 <img src="{{ like.Image.url }}"  style="width: 20px; height: auto; margin-right: 5px;">
-                Likes {{ post.count_likes }}
+                {{ post.count_likes }}Likes 
             </span>
             <span class="badge bg-info">
                 <img src="{{ comment.Image.url }}"  style="width: 20px; height: auto; margin-right: 40px;">
-                Comments {{ post.count_comments }}
+                 {{ post.count_comments }}Comments
             </span>
         </div>
+
       </div>
-      {% endfor %}
+
+
+
+      <h4>نظرات</h4>
+
+      <div id="comments">
+          {% for comment in comments %}
+              {% include "comment.html" with comment=comment depth=0 %}
+            <h4>_________________</h4>
+          {% endfor %}
+      </div>
+
+
+
+
     </div>
   </div>
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-      
-
-
-
-
-

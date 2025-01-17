@@ -28,7 +28,7 @@ class PostAdmin(admin.ModelAdmin):
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     
-    list_display = ('post' ,'user','parent','create_at')
+    list_display = ('post' ,'user','parent','text')
     search_fields = ('post',)
     list_filter = ('parent',)
 

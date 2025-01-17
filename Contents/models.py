@@ -56,7 +56,7 @@ class Post(BaseModel):
     
     def get_absolute_url(self):
         
-        return reverse("Contents:detail-post", args=[self.pk])
+        return reverse("Contents:comment-list", args=[self.pk])
     
 
 

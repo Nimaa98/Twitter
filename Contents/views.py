@@ -26,9 +26,25 @@ class PostListView(View):
             context= context,
             )
 
-class PostDetailView(View):
-    def get(self):
-        pass
+class CommentListView(View):
+
+    def get(self, request, pk):
+        
+        post = get_object_or_404(Post , pk=pk)
+
+        comment_list = post.post_comment.filter(parent = None)
+        
+
+
+        template = 'Contents/list_comment.html'
+        context = {"post" : post , "comments": comment_list}
+            
+        return render (
+                request= request,
+                template_name = template,
+                context= context,
+                )
+        
 
 
 class TagView(View):
