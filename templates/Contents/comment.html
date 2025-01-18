@@ -12,7 +12,17 @@
 
     <div class="card-body">
         <p class="card-text">{{ comment.text }}</p>
+
+            {%if depth < 10%}
+                <a href="{% url 'Contents:comment-form' post.id  comment.id %}" class="btn btn-success mt-3">پاسخ</a>
+            {%endif%}
+        <h6>{{comment.create_at}}</h6>
+
     </div>
+    
+    
+
+
 </div>
 
 

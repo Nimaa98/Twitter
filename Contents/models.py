@@ -99,7 +99,7 @@ class PostTag(BaseModel):
 
 class Comment(BaseModel):
 
-    text = models.TextField(_('Text'))
+    text = models.TextField(_('متن نظر'))
     post = models.ForeignKey(Post,on_delete=models.CASCADE , related_name='post_comment')
     user = models.ForeignKey(User , on_delete=models.CASCADE , related_name='user_comment')
 
@@ -115,6 +115,11 @@ class Comment(BaseModel):
         verbose_name = _('Comment')
         verbose_name_plural = _('Comments')
 
+
+    def make_comment(self,user,post):
+        pass
+
+
 class Like(BaseModel):
     
     post = models.ForeignKey(Post,on_delete=models.CASCADE , related_name='post_like')
@@ -129,3 +134,5 @@ class Like(BaseModel):
         verbose_name_plural = _('Likes')
 
     
+    
+
