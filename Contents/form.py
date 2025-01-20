@@ -1,25 +1,33 @@
 from django import forms
+from django.db import models
 from .models import Post , Tag ,Comment
 from Core.models import Image
+from django.forms.widgets import ClearableFileInput
+
+
+from django.forms.widgets import ClearableFileInput
+
+
 
 
 class PostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ['title','text','tags','images']
+        fields = ['title', 'text', 'tags', 'images']
+    
+    tags = forms.CharField(
+        widget=forms.TextInput(attrs={'placeholder': 'تگها را با کاما جدا کنید'}),
+        required=False
+    )
+    
 
-    tags = forms.ModelMultipleChoiceField(
-            queryset = Tag.objects.all(),
-            widget = forms.CheckboxSelectMultiple,
-            required = False
-        )
+    images = forms.FileField(
+        widget=ClearableFileInput,
+        required=False
+    )
+    
 
-    images = forms.ModelMultipleChoiceField(
-            queryset = Image.objects.all(),
-            widget = forms.CheckboxSelectMultiple,
-            required = False
-            )
 
 
 class CommentForm(forms.ModelForm):
@@ -36,3 +44,5 @@ class CommentForm(forms.ModelForm):
         }
 
 
+
+    

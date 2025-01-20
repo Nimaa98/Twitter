@@ -119,9 +119,37 @@ class CommentFormView(View):
             messages.error(request,'در وارد کردن اطلاعات دقت کنید!')
 
         return redirect('Contents:comment-form', pk=pk)
+    
 
 
+class PostFormView(View):
+    form = PostForm
 
+    def get(self, request):
+        template = 'Contents/post.form.html'
+        context = {"form": self.form(initial={'user': request.user})}
+        return render(request=request, template_name=template, context=context)
 
+    def post(self, request):
+        form = self.form(request.POST, request.FILES)
+        
+
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = request.user
+            post.save()
+
+            images = request.FILES.getlist('images')
+            Image.make_iamge(images,post)
+        
+            
+            tags = request.POST.get('tags','')            
+            Tag.make_tag(tags,post)
+
+            messages.success(request, 'پست شما با موفقیت ثبت شد!')
+            return redirect('Contents:post-list')
+        else:
+            messages.error(request, 'در وارد کردن اطلاعات دقت کنید!')
+        return redirect('Contents:post-form')
 
 

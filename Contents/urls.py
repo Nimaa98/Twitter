@@ -1,4 +1,4 @@
-from .views import PostListView , CommentListView , TagView , LikeView , CommentFormView
+from .views import PostListView , CommentListView , TagView , LikeView , CommentFormView , PostFormView
 from django.urls import path
 
 
@@ -10,5 +10,6 @@ urlpatterns = [
     path('like/<uuid:pk>/' , LikeView.as_view() , name = 'like'),
     path('tags/<uuid:pk>/' , TagView.as_view(), name = 'tag'),
     path('commnet/<uuid:pk>/<uuid:comment_pk>/' , CommentFormView.as_view(), name = 'comment-form'),
-    
+    path('post/' , PostFormView.as_view(), name = 'post-form'),
+
 ]

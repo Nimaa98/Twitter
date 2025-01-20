@@ -3,17 +3,20 @@
 
 {% block content %}
 <div class="container mt-5">
+    {% if messages %}
     {% for message in messages %}
     <div class="alert alert-danger">{{ message }}</div>
     {% endfor %}
+    {% endif %}
     <h2 class="mb-4">کامنت جدید</h2>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">ثبت کامنت</button>
+        <button type="submit" class="btn btn-primary">ثبت پست</button>
     </form>
 </div>
 {% endblock %}
+
 
 
 

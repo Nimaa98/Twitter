@@ -10,20 +10,22 @@ from django.urls import reverse
 
 
 class Post(BaseModel):
-    title = models.CharField(_('Title'),max_length=100)
-    text = models.TextField(_('Text'))
+    title = models.CharField(_('عنوان'),max_length=100)
+    text = models.TextField(_('متن'))
     user = models.ForeignKey(User,verbose_name=_('User'),
                              on_delete=models.CASCADE,
                              related_name='user_post')
     
     tags = models.ManyToManyField('Tag',related_name='tag_post',
-                             verbose_name=_('Tag'),
+                             verbose_name=_('تگ'),
+                             blank=True,
                              through='PostTag',
                              )
     
     images = models.ManyToManyField(Image,
                                            related_name='image_post',
                                            verbose_name=_('Image'),
+                                           blank=True,
                                            through='PostImage',
                                            )
     
@@ -89,10 +91,29 @@ class Tag(BaseModel):
         return reverse("Contents:tag", args=[self.pk])
 
 
+    @classmethod
+    def make_tag(cls,tags,post):
+        tags_list = [tag.strip() for tag in tags.split(',')  if tag.strip()]
+
+        for tag in tags_list:
+ 
+            tag, created = cls.objects.get_or_create(
+                text=tag,
+                defaults={'slug': tag},
+            )
+            post.tags.add(tag)
+
+
+
+
+
 class PostTag(BaseModel):
     post = models.ForeignKey(Post,on_delete=models.CASCADE)
     tag = models.ForeignKey(Tag,on_delete=models.CASCADE)
     order = models.PositiveIntegerField(default=0)
+
+
+    
 
 
 
@@ -136,3 +157,5 @@ class Like(BaseModel):
     
     
 
+
+       

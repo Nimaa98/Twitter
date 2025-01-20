@@ -3,6 +3,9 @@
 {% block content %}
 <div class="container mt-3">
     <div class="row">
+      
+      <a href="{% url 'Contents:post-form' %}" class="btn btn-primary btn-sm">پست جدید</a>
+
       <h2> جدیدترین پست ها </h2><br>
       {% for post in post_list %}
       

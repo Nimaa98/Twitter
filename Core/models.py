@@ -29,8 +29,8 @@ def upload_to(instance,filename):
 
 class Image(BaseModel):
 
-    name = models.CharField(_('Name'), max_length=200)
-    alt_text = models.CharField(_('Alternative Text'), max_length=50 , blank=True)
+    name = models.CharField(_('Name'), max_length=200,blank=True, null=True)
+    alt_text = models.CharField(_('Alternative Text'), max_length=50 , blank=True, null=True)
     model_name = models.CharField(max_length=50)
     Image = models.ImageField(_('Image'), upload_to= upload_to)
     is_default = models.BooleanField(default=False)
@@ -42,6 +42,17 @@ class Image(BaseModel):
         verbose_name_plural = _('Images')
 
 
+    @classmethod
+    def make_iamge(cls,images,post):
+
+        for image in images:
+                
+            img = cls.objects.create(
+                name=image.name,
+                Image=image,
+                model_name="post"
+            )
+            post.images.add(img)
 
 
 
