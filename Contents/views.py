@@ -1,5 +1,5 @@
 from django.shortcuts import render , get_object_or_404 , redirect
-from .models import Post,Comment,Like,Tag, PostImage,PostTag
+from .models import Post,Comment,Like,Tag, PostImage,PostTag, Follow_Tag
 from django.views.generic import View
 from .form import PostForm , CommentForm
 from django.contrib.auth.decorators import login_required 
@@ -23,6 +23,7 @@ class PostListView(View):
         template = 'Contents/list_post.html'
         context = {"post_list" : post_list , "like" : like_symble , "comment" : comment_symble}
 
+
         return render (
             request= request,
             template_name = template,
@@ -38,7 +39,6 @@ class CommentListView(View):
         comment_list = post.post_comment.filter(parent = None)
         like_symble = Image.objects.filter(name = 'like').first()
         comment_symble = Image.objects.filter(name = 'comment').first()
-
         template = 'Contents/list_comment.html'
         context = {"post" : post , "comments": comment_list,"like" : like_symble , "comment" : comment_symble}
             
@@ -50,9 +50,81 @@ class CommentListView(View):
         
 
 
-class TagView(View):
-    def get(self):
-        pass
+class TagView(LoginRequiredMixin,View):
+
+
+    like_symble = Image.objects.filter(name = 'like').first()
+    comment_symble = Image.objects.filter(name = 'comment').first()
+
+    template = 'Contents/tag.html'
+
+    def get(self, request,pk):
+
+        tag = Tag.objects.get(pk=pk)
+        post_list = Post.objects.filter(tags=tag)
+
+        tag.is_followed = Follow_Tag.is_following(request.user,tag)
+
+        context = {"post_list" : post_list , "like" : self.like_symble , "comment" : self.comment_symble, "tag":tag}
+        return render (
+            request= request,
+            template_name = self.template,
+            context= context,
+            )
+
+    def post(self, request,pk):
+
+        tag = Tag.objects.get(pk=pk)
+        post_list = Post.objects.filter(tags=tag)
+        
+        print(request.POST)
+        if request.POST["action"] == "follow":
+            
+            Follow_Tag.follow(request.user,tag)
+        else:
+            
+            Follow_Tag.unfollow(request.user,tag)
+
+        return redirect('Contents:tag' ,tag.id)
+
+
+
+
+
+class FavoritTagView(View):
+   
+    post_list=[]
+
+    def get(self, request):
+
+        like_symble = Image.objects.filter(name = 'like').first()
+        comment_symble = Image.objects.filter(name = 'comment').first()
+
+        template = 'Contents/favorit_tags.html'
+
+        followed_tags = Follow_Tag.objects.filter(follower_user=request.user).values_list('following_tag',flat=True)
+        
+        unique_posts = set()
+
+        for tag in followed_tags:
+            single_post_list = Post.objects.filter(tags= tag)
+            unique_posts.update(single_post_list)
+        
+            self.post_list = sorted(unique_posts , key=lambda post: post.create_at , reverse=True)
+        
+        numbers = False
+        if len(self.post_list) == 0:
+            numbers = True
+
+    
+        context = {"post_list" : self.post_list , "like" : like_symble , "comment" : comment_symble, "numbers":numbers}
+        return render (
+            request= request,
+            template_name = template,
+            context= context,
+            )
+
+
 
 
 class LikeView(LoginRequiredMixin,View):
@@ -71,7 +143,7 @@ class LikeView(LoginRequiredMixin,View):
         return JsonResponse({'error': 'Invalid request method'}, status=400)
     
 
-class CommentFormView(View):
+class CommentFormView(LoginRequiredMixin,View):
     
     form = CommentForm
     
@@ -122,7 +194,7 @@ class CommentFormView(View):
     
 
 
-class PostFormView(View):
+class PostFormView(LoginRequiredMixin,View):
     form = PostForm
 
     def get(self, request):

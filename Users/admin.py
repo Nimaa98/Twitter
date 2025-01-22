@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User , Follow
+from .models import User , Follow 
 
 # Register your models here.
 
@@ -15,3 +15,4 @@ class FollowAdmin(admin.ModelAdmin):
     
     list_display = ('following_user' , 'follower_user', 'create_at')
     list_filter = ('following_user',)
+

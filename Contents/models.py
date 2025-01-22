@@ -73,9 +73,6 @@ class Tag(BaseModel):
     text = models.CharField(_('Text'), max_length= 100)
     slug = models.SlugField(unique=True,db_index=True)
 
-    #def save(self, *args, **kwargs):
-        #self.slug = slugify(self.text)
-        #super().save(*args,**kwargs)
         
 
     def __str__(self):
@@ -105,7 +102,35 @@ class Tag(BaseModel):
 
 
 
+class Follow_Tag(BaseModel):
+     
+    following_tag = models.ForeignKey(Tag , on_delete= models.CASCADE ,
+                                         related_name='Following_Tag' )
+     
+    follower_user = models.ForeignKey(User, on_delete=models.CASCADE ,
+                                        related_name='Follower_user')
+     
+    class Meta:
+        unique_together = ('following_tag', 'follower_user')
+        verbose_name = _('Follow Tag')
+        verbose_name_plural = _('Follow Tags')
 
+
+    @staticmethod
+    def follow(from_user,tag):
+        Follow_Tag.objects.create(follower_user = from_user , following_tag=tag)
+
+    @staticmethod
+    def unfollow(from_user,tag):
+        Follow_Tag.objects.filter(follower_user = from_user , following_tag=tag).delete()
+
+    @staticmethod
+    def is_following(this_user,tag):
+        return Follow_Tag.objects.filter(following_tag=tag, follower_user=this_user).exists()
+
+
+    
+    
 
 class PostTag(BaseModel):
     post = models.ForeignKey(Post,on_delete=models.CASCADE)

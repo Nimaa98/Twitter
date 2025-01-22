@@ -99,7 +99,6 @@ class LoginView(View):
         messages.error(request,'نام کاربری یا رمز عبور اشتباه است!')
         return redirect('Users:login')
 
-
 class FollowView(LoginRequiredMixin,View):
     def post(self,request, pk):
 

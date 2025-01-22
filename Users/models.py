@@ -17,7 +17,7 @@ class User(BaseModel , AbstractUser):
                                         default= None)
    
    
-    favorit_tags = []
+    list_tags = []
 
     class Meta:
             
@@ -45,13 +45,6 @@ class User(BaseModel , AbstractUser):
     def get_absolute_url(self):
         
         return reverse("Users:detail-user", args=[self.pk])
-    
-    
-    def Tag(self,tag,situation):
-        if situation == 'interest':
-            self.favorit_tags.append(tag)
-        else:
-            self.favorit_tags.remove(tag)
 
     
     
@@ -70,3 +63,4 @@ class Follow(BaseModel):
         verbose_name = _('Follow')
         verbose_name_plural = _('Follows')
         
+

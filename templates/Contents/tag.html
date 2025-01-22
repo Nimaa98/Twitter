@@ -1,0 +1,37 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-3">
+    <div class="row">
+      
+      <a href="{% url 'Contents:post-form' %}" class="btn btn-primary btn-sm">پست جدید</a>
+
+      <h1> {{tag.text}}</h1><br>
+
+      <form method="POST" action="{% url 'Contents:tag'  tag.id %}">
+        {% csrf_token %}
+            {% if tag.is_followed %}
+            <button type="submit" name="action"  value="unfollow" class="btn btn-primary btn-sm">
+                Unfollow
+            </button>
+            {% else %}
+            <button type="submit" name="action"  value="follow" class="btn btn-primary btn-sm">
+                Follow
+            </button>
+            {% endif %}
+        </button>
+        
+    </form>
+
+
+      {% for post in post_list %}
+      
+        {% include "Components/card.html" %}
+        
+
+      {% endfor %}
+    </div>
+  </div>
+
+{% endblock %}
