@@ -1,5 +1,5 @@
 from django.shortcuts import render , get_object_or_404 , redirect
-from .models import Post,Comment,Like,Tag, PostImage,PostTag, Follow_Tag
+from .models import Post,Comment,Like,Tag, PostImage,PostTag, Follow_Tag ,Archive
 from django.views.generic import View
 from .form import PostForm , CommentForm
 from django.contrib.auth.decorators import login_required 
@@ -91,7 +91,7 @@ class TagView(LoginRequiredMixin,View):
 
 
 
-class FavoritTagView(View):
+class FavoritTagView(LoginRequiredMixin,View):
    
     post_list=[]
 
@@ -225,3 +225,41 @@ class PostFormView(LoginRequiredMixin,View):
         return redirect('Contents:post-form')
 
 
+class ArchivePostView(LoginRequiredMixin,View):
+
+    def post(self,request,pk):
+        user = request.user
+        post = get_object_or_404(Post,pk=pk)
+
+
+        if request.POST["action"] == "save" and not Archive.is_save(user,post):
+            Archive.add_post(user,post)
+
+        else:
+            Archive.remove_post(user,post)
+
+        return redirect('Contents:get-archives')
+      
+class ArchiveGetView(LoginRequiredMixin,View):
+    
+    def get(self,request):
+
+        user = request.user
+        
+        post_list = Archive.take_posts(user)
+
+        for post in post_list:
+            post.is_saved = Archive.is_save(user , post)
+
+
+        like_symble = Image.objects.filter(name = 'like').first()
+        comment_symble = Image.objects.filter(name = 'comment').first()
+        template = 'Contents/archive.html'
+        context = {"post_list" : post_list , "like" : like_symble , "comment" : comment_symble}
+
+
+        return render (
+            request= request,
+            template_name = template,
+            context= context,
+            )

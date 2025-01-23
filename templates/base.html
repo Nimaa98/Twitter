@@ -6,7 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Twitter</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+
+
     <style>
+
         body {
             background-color: #f8f9fa;
             margin: 0;
@@ -71,6 +74,20 @@
     <div class="navbar">
         Twitter
     </div>
+
+   
+    
+
+    
+    <br><form style="float: right;" method="get" action="{% url 'Contents:post-list'%}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary btn-sm"> HOME </button>
+    </form>
+    
+
+
+
+
 
     <div class="container">
         {% block content %}

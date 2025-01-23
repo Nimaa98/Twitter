@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-3">
+    <div class="row">
+    
+
+        <h2> مطالب ذخیره شده</h2><br>
+
+      {% for post in post_list %}
+      
+        {% include "Components/card.html" %}
+        
+
+      {% endfor %}
+    </div>
+  </div>
+
+{% endblock %}

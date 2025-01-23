@@ -51,7 +51,28 @@
   </div>
     <br><a href="{% url 'Contents:comment-form' post.id  post.id %}" class="btn btn-success mt-3">افزودن کامنت جدید</a>
     <h6>{{post.create_at}}</h6>
+
+
+
+
+    {%if post.is_saved%}
+    <br><form  style="float: left;" method="POST"  action="{% url 'Contents:archive'  post.id %}">
+        {% csrf_token %}
+            <button type="submit" name="action"  value="save" class="btn btn-primary btn-sm">
+                remove from archive
+            </button>
+    </form>
+    {%else%}
+    <form  style="float: left;" method="POST"  action="{% url 'Contents:archive'  post.id %}">
+        {% csrf_token %}
+            <button type="submit" name="action"  value="save" class="btn btn-primary btn-sm">
+                save
+            </button>
+    </form>
+    {%endif%}
+
   </div>
+
 
 
   

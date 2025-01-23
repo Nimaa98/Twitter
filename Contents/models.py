@@ -15,6 +15,7 @@ class Post(BaseModel):
     user = models.ForeignKey(User,verbose_name=_('User'),
                              on_delete=models.CASCADE,
                              related_name='user_post')
+
     
     tags = models.ManyToManyField('Tag',related_name='tag_post',
                              verbose_name=_('تگ'),
@@ -162,10 +163,6 @@ class Comment(BaseModel):
         verbose_name_plural = _('Comments')
 
 
-    def make_comment(self,user,post):
-        pass
-
-
 class Like(BaseModel):
     
     post = models.ForeignKey(Post,on_delete=models.CASCADE , related_name='post_like')
@@ -182,5 +179,37 @@ class Like(BaseModel):
     
     
 
+class Archive(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="archive")
+    archiver_user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="user_archive", null=True
+    )
 
-       
+
+
+    
+
+
+    @staticmethod
+    def add_post(user, post):
+        Archive.objects.create(
+            archiver_user=user, post=post
+        )
+
+
+    @staticmethod
+    def remove_post(user,post):
+        Archive.objects.filter(archiver_user=user,post=post).delete()
+
+    @staticmethod
+    def is_save(user,post):
+        return Archive.objects.filter(archiver_user=user , post=post).exists()
+
+    @staticmethod
+    def take_posts(user):
+        
+        Archives =  Archive.objects.filter(archiver_user=user)
+
+        post_list = [archive.post for archive in Archives]
+        return post_list
+

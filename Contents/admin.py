@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post , Tag , Comment , Like , PostImage , PostTag , Follow_Tag
+from .models import Post , Tag , Comment , Like , PostImage , PostTag , Follow_Tag , Archive
 
 # Register your models here.
 
@@ -53,3 +53,10 @@ class FollowTagAdmin(admin.ModelAdmin):
     
     list_display = ('following_tag' , 'follower_user', 'create_at')
     list_filter = ('following_tag',)
+
+
+@admin.register(Archive)
+class Archivedmin(admin.ModelAdmin):
+    
+    list_display = ('post' , 'archiver_user')
+    list_filter = ('post',)
