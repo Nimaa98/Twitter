@@ -15,13 +15,6 @@
                 <div style="margin-top: 10px; display: flex; gap: 15px; font-size: 14px; color: #555;">
                     <span>Following: {{ user.count_following }}</span>
                     <span>Followers: {{ user.count_followers }}</span>
-                    <form method="POST" action="{% url 'Users:follow-user'  user.pk %}" id="follow-form-{{ user.pk }}">
-                        {% csrf_token %}
-                        <input type="hidden" name="action" value="follow">
-                        <input type="hidden" name="user_id" value="{{ user.pk }}">
-                        <button type="submit" class="btn btn-primary btn-sm"> Follow </button>
-                    </form>
-
                 </div>
             </li>
         {% endfor %}

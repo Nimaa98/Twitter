@@ -1,14 +1,23 @@
 {% extends 'base.html' %}
 
+
+
 {% block content %}
-<div class="container mt-3">
-    <div class="row">
-      
-    <br><form style="float: right;" method="get" action="{% url 'Users:login'%}">
+
+
+<br><form style="float: right;" method="get" action="{% url 'Users:login'%}">
         {% csrf_token %}
         <button type="submit" class="btn btn-primary btn-sm"> LOGIN </button>
     </form>
-        
+
+
+<div class="container mt-3">
+    <div class="row">
+      
+    
+    
+    <a href="{% url 'Users:user-list' %}" class="btn btn-primary btn-sm">کاربران</a><br>
+
 
       <br><h2> جدیدترین پست ها </h2><br>
       {% for post in post_list %}
