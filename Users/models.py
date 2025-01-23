@@ -16,8 +16,10 @@ class User(BaseModel , AbstractUser):
                                         related_name= 'user_images',
                                         default= None)
    
+
    
-    list_tags = []
+    soft_delete = models.BooleanField(_('Delete User'), default=False)
+
 
     class Meta:
             

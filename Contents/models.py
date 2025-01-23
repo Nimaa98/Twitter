@@ -30,7 +30,10 @@ class Post(BaseModel):
                                            through='PostImage',
                                            )
     
-                             
+    soft_delete = models.BooleanField(_('Delete Post'), default=False)
+
+
+
     def __str__(self):
         return self.title
     

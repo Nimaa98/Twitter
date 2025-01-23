@@ -7,6 +7,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from Core.models import Image
 from django.http import JsonResponse
+from django.contrib.auth import authenticate , login , logout
+
 
 
 
@@ -20,10 +22,20 @@ class PostListView(View):
         post_list = Post.objects.all()
         like_symble = Image.objects.filter(name = 'like').first()
         comment_symble = Image.objects.filter(name = 'comment').first()
-        template = 'Contents/list_post.html'
+        
         context = {"post_list" : post_list , "like" : like_symble , "comment" : comment_symble}
 
 
+        
+
+        if request.user.is_authenticated:
+            template = 'Contents/list_post.html'
+        
+        else:
+            template = 'Contents/main_page.html'
+            
+        
+        
         return render (
             request= request,
             template_name = template,

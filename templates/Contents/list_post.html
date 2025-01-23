@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<br><form style="float: right;" method="get" action="{% url 'Users:logout'%}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary btn-sm"> LOGOUT </button>
+    </form>
 <div class="container mt-3">
+
     <div class="row">
       
       <a href="{% url 'Contents:post-form' %}" class="btn btn-primary btn-sm">پست جدید</a><br>

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-3">
+    <div class="row">
+      
+    <br><form style="float: right;" method="get" action="{% url 'Users:login'%}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary btn-sm"> LOGIN </button>
+    </form>
+        
+
+      <br><h2> جدیدترین پست ها </h2><br>
+      {% for post in post_list %}
+      
+        {% include "Components/card.html" %}
+        
+
+      {% endfor %}
+    </div>
+  </div>
+
+{% endblock %}

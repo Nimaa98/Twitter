@@ -94,10 +94,12 @@ class LoginView(View):
 
         if user:
             login(request,user)
-            return redirect ('Users:user-profile')
+            return redirect ('Contents:post-list')
 
         messages.error(request,'نام کاربری یا رمز عبور اشتباه است!')
         return redirect('Users:login')
+
+
 
 class FollowView(LoginRequiredMixin,View):
     def post(self,request, pk):
@@ -112,3 +114,10 @@ class FollowView(LoginRequiredMixin,View):
             user.unfollow(request.user,user)
         
         return redirect('Users:user-profile')
+
+class LogoutView(View):
+
+    def get(self , request):
+
+        logout(request)
+        return redirect('Contents:post-list')
