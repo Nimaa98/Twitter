@@ -58,7 +58,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            BASE_DIR / 'templates',
+            BASE_DIR / 'templates', BASE_DIR / 'templates/Contents' , BASE_DIR / 'templates/Components'
         ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -122,8 +122,9 @@ USE_TZ = True
 
 AUTH_USER_MODEL = 'Users.User'
 
-LOGIN_URL = 'login/'
+LOGIN_URL = 'Users:login'
 #LOGIN_REDIRECT_URL = 'Users:login'
+LOGOUT_REDIRECT_URL = 'logout'
 
 
 STATIC_URL = "static/"
@@ -138,3 +139,5 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+

@@ -1,0 +1,41 @@
+
+
+<div class="card" style="margin-top: 10px; margin-right: {{ depth|add:1 }}0px;">
+    <div class="card-header d-flex align-items-center">
+        <div style="display: flex; align-items: center;">
+            <img src="{{ comment.user.profile_image.Image.url }}" style="width: 30px; height: auto; margin-right: 0px;">
+            <div>
+                <a href="{{ comment.user.get_absolute_url }}" class="fw-bold d-block">{{ comment.user.username }}</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <p class="card-text">{{ comment.text }}</p>
+
+            {%if depth < 10%}
+                <a href="{% url 'Contents:comment-form' post.id  comment.id %}" class="btn btn-success mt-3">پاسخ</a>
+            {%endif%}
+        <h6>{{comment.create_at}}</h6>
+
+    </div>
+    
+    
+
+
+</div>
+
+
+
+{% if depth < 10 %}
+    {% for child in comment.comment.all %}
+        {% include "comment.html" with comment=child depth=depth|add:3 %}
+    {% endfor %}
+{% endif %}
+
+
+
+
+
+
+

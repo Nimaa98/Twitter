@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<br><form style="float: right;" method="get" action="{% url 'Users:logout'%}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary btn-sm"> LOGOUT </button>
+    </form>
+<div class="container mt-3">
+
+    <div class="row">
+      
+      <br><a href="{% url 'Contents:post-form' %}" class="btn btn-primary btn-sm">پست جدید</a><br>
+
+      <br><a style="color: orange;" href="{% url 'Contents:favorit-tags' %}" class="btn btn-primary btn-sm">موضوعات مورد علاقه</a><br>
+
+      <br><a style="color: green;" href="{% url 'Contents:get-archives' %}" class="btn btn-primary btn-sm">آرشیو</a><br>
+
+      <br><a style="color: black;"  href="{% url 'Users:user-profile' %}" class="btn btn-primary btn-sm">کاربران</a><br>
+
+
+      <br>
+      {%if user%}
+      <form method = "post" action="{% url 'Contents:soft-delete' %}">
+        {% csrf_token %}
+            {% if  user.soft_delete %}
+            <button type="submit" name="action"  value="undelete" class="btn btn-primary btn-sm">
+                برگرداندن اکانت
+            </button>
+            {% else %}
+            <button type="submit" name="action"  value="delete" class="btn btn-primary btn-sm">
+                تعلیق اکانت
+            </button>
+        </button>
+        {%endif%}
+    </form>
+    {%endif%}
+
+
+
+
+
+      <h2> جدیدترین پست ها </h2><br>
+      {% for post in post_list %}
+      {%if not post.soft_delete%}
+
+          {% include "Components/card.html" %}
+
+      {%endif%}
+      {% endfor %}
+    </div>
+  </div>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+      
+
+
+
+
+

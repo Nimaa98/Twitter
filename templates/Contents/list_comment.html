@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{%load static%}
+{% block content %}
+<div class="container mt-3">
+    <div class="row">
+      
+        {% include "Components/card.html" %}
+
+      <h4>نظرات</h4>
+
+      <div id="comments">
+          {% for comment in comments %}
+              {% include "Contents/comment.html" with comment=comment depth=0 %}
+            <h4>_________________</h4>
+          {% endfor %}
+      </div>
+
+
+
+    </div>
+  
+</div>
+{% endblock %}
+
+
+<div class="container">
+</div>

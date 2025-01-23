@@ -1,0 +1,123 @@
+
+{% load static %}
+<div class="card">
+    <div class="card-header d-flex align-items-center">
+        <div style="display: flex; align-items: center;">
+            <img src="{{ post.user.profile_image.Image.url }}" style="width: 50px; height: auto; margin-right: 0px;">
+            <div>
+                <a href="{{ post.user.get_absolute_url }}" class="fw-bold d-block">{{ post.user.username }}</a>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card-body">
+      <h4 class="card-subtitle mb-2 text-muted">{{ post.title }}</h4>
+      <p class="card-text">{{ post.text }}</p>
+      {% if post.images.all %}
+      <div class="post-images">
+        {% for image in post.images.all %}
+        <img src="{{ image.Image.url }}" alt="{{ image.name }}" class="img-thumbnail" style="max-width: 200px; margin-bottom: 10px;">
+        {% endfor %}
+      </div>
+      {% endif %}
+
+
+      {% if post.tags.all %}
+      <div class="post-tags mt-3">
+        {% for tag in post.tags.all %}
+        <a href="{{ tag.get_absolute_url }}" class="fw-bold d-block">#{{ tag.text }}</a><br>
+        <br>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+
+
+    <div class="post-info mt-3" style="display: flex; align-items: center; background-color: #538C9D;">
+ 
+      <button id="like-button-{{ post.id }}" class="badge bg-success me-3" style="border: none; cursor: pointer; display: flex; align-items: center; background-color: #538C9D;"
+              onclick="likePost('{{ post.id }}')">
+          <img src="{{ like.Image.url }}" style="width: 20px; height: auto; margin-right: 5px;">
+          <span id="like-count-{{ post.id }}">{{ post.count_likes }}</span> Likes
+      </button>
+
+      <button class="badge bg-info" style="border: none; cursor: pointer; display: flex; align-items: center; background-color: #538C9D;"
+              onclick="window.location.href='{% url 'Contents:comment-list' post.id %}'">
+          <img src="{{ comment.Image.url }}" style="width: 20px; height: auto; margin-right: 40px;">
+          {{ post.count_comments }} Comments
+      </button>
+
+  </div>
+    <br><a href="{% url 'Contents:comment-form' post.id  post.id %}" class="btn btn-success mt-3">افزودن کامنت جدید</a>
+    <h6>{{post.create_at}}</h6>
+
+
+
+
+    {%if post.is_saved%}
+    <br><form  style="float: left;" method="POST"  action="{% url 'Contents:archive'  post.id %}">
+        {% csrf_token %}
+            <button type="submit" name="action"  value="save" class="btn btn-primary btn-sm">
+                remove from archive
+            </button>
+    </form>
+    {%else%}
+    <form  style="float: left;" method="POST"  action="{% url 'Contents:archive'  post.id %}">
+        {% csrf_token %}
+            <button type="submit" name="action"  value="save" class="btn btn-primary btn-sm">
+                save
+            </button>
+    </form>
+    {%endif%}
+
+  </div>
+
+
+
+  
+  <script>
+    function likePost(postId) {
+        const csrftoken = getCookie('csrftoken');
+        fetch(`/like/${postId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json(); 
+            } else {
+                throw new Error('Failed to like the post');
+            }
+        })
+        .then(data => {
+
+          const likeCountElement = document.getElementById(`like-count-${postId}`);
+            likeCountElement.textContent = data.likes; 
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    }
+
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>

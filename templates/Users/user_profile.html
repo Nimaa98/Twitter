@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h4 class="card-subtitle mb-2 text-muted"> wellcom {{ this_user }}</h4>
+    <h2>لیست کاربران</h2>
+    <ul style="list-style: none; padding: 0;">
+        
+
+        {% for user in user_list %}
+        {%if not user.soft_delete%}
+
+            <li class="mb-4 p-3" style="border-bottom: 1px solid #ddd;">
+                <div style="display: flex; align-items: center;">
+                    <img src="{{ user.profile_image.Image.url }}" style="width: 50px; height: auto; margin-right: 15px;">
+                    <div>
+                        <a href="{{ user.get_absolute_url }}" class="fw-bold d-block">{{ user.username }}</a>
+                    </div>
+                </div>
+
+                <div style="margin-top: 10px; display: flex; gap: 15px; font-size: 14px; color: #555;">
+                    <span>Following: {{ user.count_following }}</span>
+                    <span>Followers: {{ user.count_followers }}</span>
+                    <form method="POST" action="{% url 'Users:follow-user'  user.pk %}" id="follow-form-{{ user.pk }}">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="follow">
+                        <input type="hidden" name="user_id" value="{{ user.pk }}">
+                        {% if user != this_user%}
+                            {% if user.is_followed %}
+                            <button type="submit" name="action"  value="unfollow" class="btn btn-primary btn-sm">
+                                Unfollow
+                            </button>
+                            {% else %}
+                            <button type="submit" name="action"  value="follow" class="btn btn-primary btn-sm">
+                                Follow
+                            </button>
+                            {% endif %}
+                        </button>
+                        {%endif%}
+                    </form>
+
+                </div>
+            </li>
+            {%endif%}
+        {%endfor%}
+    </ul>
+{% endblock %}
+

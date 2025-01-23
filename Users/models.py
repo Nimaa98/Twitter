@@ -15,7 +15,12 @@ class User(BaseModel , AbstractUser):
                                         null=True , blank=True ,
                                         related_name= 'user_images',
                                         default= None)
-     
+   
+
+   
+    soft_delete = models.BooleanField(_('Delete User'), default=False)
+
+
     class Meta:
             
         verbose_name = _('User')
@@ -28,11 +33,33 @@ class User(BaseModel , AbstractUser):
     def count_following(self):
         return self.Following.count()
     
+    def follow(self,from_user,to_user):
+        Follow.objects.create(follower_user = from_user , following_user=to_user)
+
+    def unfollow(self,from_user,to_user):
+        Follow.objects.filter(follower_user = from_user , following_user=to_user).delete()
+
+
+    def is_following(self,this_user,user):
+        return Follow.objects.filter(following_user=user, follower_user=this_user).exists()
+
 
     def get_absolute_url(self):
         
         return reverse("Users:detail-user", args=[self.pk])
+
     
+
+
+    @staticmethod
+    def delete_user(user):
+        user.soft_delete = True
+        user.save()
+
+    @staticmethod
+    def return_user(user):
+        user.soft_delete = False
+        user.save()
     
 
 
@@ -45,8 +72,8 @@ class Follow(BaseModel):
                                         related_name='Follower')
      
     class Meta:
-        unique_together = ('following_user' , 'follower_user')  
-
+        unique_together = ('following_user', 'follower_user')
         verbose_name = _('Follow')
         verbose_name_plural = _('Follows')
         
+
