@@ -11,7 +11,6 @@ from django.contrib.auth import authenticate , login , logout
 
 
 
-
 # Create your views here.
 
 
@@ -19,20 +18,20 @@ class PostListView(View):
     
     def get(self, request):
 
+        
         post_list = Post.objects.all()
         like_symble = Image.objects.filter(name = 'like').first()
         comment_symble = Image.objects.filter(name = 'comment').first()
         
-        context = {"post_list" : post_list , "like" : like_symble , "comment" : comment_symble}
-
-
-        
 
         if request.user.is_authenticated:
+            user = request.user
             template = 'Contents/list_post.html'
+            context = {"post_list" : post_list , "like" : like_symble , "comment" : comment_symble, "user":user}
         
         else:
             template = 'Contents/main_page.html'
+            context = {"post_list" : post_list , "like" : like_symble , "comment" : comment_symble}
             
         
         
@@ -254,6 +253,7 @@ class ArchivePostView(LoginRequiredMixin,View):
       
 class ArchiveGetView(LoginRequiredMixin,View):
     
+    
     def get(self,request):
 
         user = request.user
@@ -275,3 +275,24 @@ class ArchiveGetView(LoginRequiredMixin,View):
             template_name = template,
             context= context,
             )
+    
+
+
+
+class DeleteView(LoginRequiredMixin,View):
+    def post(self,request):
+        
+        user = request.user
+        
+        if request.POST["action"] == "undelete":
+            Post.return_posts(user)
+            return redirect ("Users:soft-return")
+        
+        else:
+            Post.delete_posts(user)
+            return redirect ("Users:soft-delete")
+        
+        
+        
+
+        

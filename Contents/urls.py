@@ -2,7 +2,7 @@ from .views import (PostListView , CommentListView ,
                      TagView , LikeView ,
                      CommentFormView , PostFormView,
                      FavoritTagView , ArchivePostView,
-                     ArchiveGetView)
+                     ArchiveGetView , DeleteView)
 from django.urls import path
 
 
@@ -18,4 +18,7 @@ urlpatterns = [
     path('tags/' , FavoritTagView.as_view(), name = 'favorit-tags'),
     path('archive/<uuid:pk>/' , ArchivePostView.as_view(), name = 'archive'),
     path('archive/' , ArchiveGetView.as_view(), name = 'get-archives'),
+    path('delete/' , DeleteView.as_view(), name = 'soft-delete'),
+
+
 ]

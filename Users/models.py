@@ -49,6 +49,17 @@ class User(BaseModel , AbstractUser):
         return reverse("Users:detail-user", args=[self.pk])
 
     
+
+
+    @staticmethod
+    def delete_user(user):
+        user.soft_delete = True
+        user.save()
+
+    @staticmethod
+    def return_user(user):
+        user.soft_delete = False
+        user.save()
     
 
 

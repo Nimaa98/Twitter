@@ -117,7 +117,29 @@ class FollowView(LoginRequiredMixin,View):
 
 class LogoutView(View):
 
+
+
     def get(self , request):
 
         logout(request)
         return redirect('Contents:post-list')
+    
+
+class DeletePostView(LoginRequiredMixin,View):
+    def get(self,request):
+        
+        user = request.user
+        User.delete_user(user)
+
+        return redirect("Contents:post-list")  
+
+
+class ReturnUserView(LoginRequiredMixin,View):
+
+    def get(self,request):
+        
+        user = request.user
+        User.return_user(user)
+        
+        return redirect("Contents:post-list")  
+

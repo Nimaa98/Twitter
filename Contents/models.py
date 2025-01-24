@@ -30,7 +30,7 @@ class Post(BaseModel):
                                            through='PostImage',
                                            )
     
-    soft_delete = models.BooleanField(_('Delete Post'), default=False)
+    soft_delete = models.BooleanField(_('Soft Delete Post'), default=False)
 
 
 
@@ -64,6 +64,21 @@ class Post(BaseModel):
         
         return reverse("Contents:comment-list", args=[self.pk])
     
+
+    @staticmethod
+    def delete_posts(user):
+        posts = Post.objects.filter(user= user)
+        for post in posts:
+            post.soft_delete = True
+            post.save()
+
+    @staticmethod
+    def return_posts(user):
+        posts = Post.objects.filter(user= user)
+        for post in posts:
+            post.soft_delete = False
+            post.save()
+            
 
 
 class PostImage(BaseModel):
@@ -215,4 +230,5 @@ class Archive(models.Model):
 
         post_list = [archive.post for archive in Archives]
         return post_list
+
 

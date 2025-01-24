@@ -21,9 +21,10 @@
 
       <br><h2> جدیدترین پست ها </h2><br>
       {% for post in post_list %}
-      
+      {%if not post.soft_delete%}
+
         {% include "Components/card.html" %}
-        
+      {%endif%}
 
       {% endfor %}
     </div>
